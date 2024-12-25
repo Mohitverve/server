@@ -10,10 +10,10 @@ app.use(express.json());
 
 // 1) Configure Cloudinary with your credentials
 cloudinary.config({
-  cloud_name: "de9nkc1wv",
-  api_key: "826552287554944",
-  api_secret: "hbj2V1dXjQBSqSG2HidxGWxJzGc",
-});
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
 // 2) Endpoint to generate a signature
 app.post("/get-signature", (req, res) => {
