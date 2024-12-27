@@ -29,6 +29,8 @@ app.get("/", (req, res) => {
 
 app.post("/get-signature", (req, res) => {
   try {
+    console.log("Request body:", req.body); // Add logging for debugging
+
     const { folder, public_id, timestamp } = req.body;
 
     if (!folder || !public_id || !timestamp) {
@@ -53,7 +55,8 @@ app.post("/get-signature", (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 8080;
+
+const PORT = process.env.PORT || 8080; // Default to 8080 if PORT is not set
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
