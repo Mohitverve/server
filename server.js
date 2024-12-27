@@ -23,9 +23,10 @@ console.log("Cloudinary API Key:", cloudinary.config().api_key);
 console.log("Cloudinary Cloud Name:", cloudinary.config().cloud_name);
 
 // Define routes (as per your code)
-app.get("/", (req, res) => {
-  res.send("Server is running!");
+app.get("/test", (req, res) => {
+  res.json({ status: "success", message: "Server is running on Railway!" });
 });
+
 
 app.post("/get-signature", (req, res) => {
   try {
