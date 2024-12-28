@@ -7,12 +7,13 @@ const cloudinary = require("cloudinary").v2;
 // Initialize express
 const app = express();
 
-// Use CORS middleware
+// CORS Configuration
 app.use(
   cors({
     origin: "https://date-planner-lyart.vercel.app", // Allow requests from your frontend
-    methods: ["GET", "POST"], // Allow these HTTP methods
-    allowedHeaders: ["Content-Type"], // Allow these headers
+    methods: ["GET", "POST", "OPTIONS"], // Allow necessary HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow necessary headers
+    credentials: true, // If you need to send cookies or auth headers
   })
 );
 
