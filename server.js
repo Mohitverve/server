@@ -7,8 +7,19 @@ const cloudinary = require("cloudinary").v2;
 // Initialize express
 const app = express();
 
-// Use CORS and JSON middleware
-app.use(cors());
+// Use CORS middleware
+app.use(
+  cors({
+    origin: "https://date-planner-lyart.vercel.app", // Allow requests from your frontend
+    methods: ["GET", "POST"], // Allow these HTTP methods
+    allowedHeaders: ["Content-Type"], // Allow these headers
+  })
+);
+
+// Middleware to handle preflight requests
+app.options("*", cors());
+
+// Parse JSON request bodies
 app.use(express.json());
 
 // Cloudinary configuration
@@ -22,28 +33,30 @@ console.log("Cloudinary Config:");
 console.log("Cloudinary API Key:", cloudinary.config().api_key);
 console.log("Cloudinary Cloud Name:", cloudinary.config().cloud_name);
 
-// Define routes (as per your code)
+// Test route to verify server is running
 app.get("/test", (req, res) => {
+  console.log("Test route hit");
   res.json({ status: "success", message: "Server is running on Railway!" });
 });
 
-
+// Endpoint to generate a Cloudinary signature
 app.post("/get-signature", (req, res) => {
+  console.log("Incoming request to /get-signature");
   try {
-    console.log("Request body:", req.body); // Add logging for debugging
-
     const { folder, public_id, timestamp } = req.body;
 
     if (!folder || !public_id || !timestamp) {
+      console.log("Missing parameters in /get-signature request:", req.body);
       return res.status(400).json({ error: "Missing required parameters." });
     }
 
     const paramsToSign = { folder, public_id, timestamp };
-
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
       cloudinary.config().api_secret
     );
+
+    console.log("Signature generated:", signature);
 
     res.json({
       signature: signature,
@@ -51,13 +64,15 @@ app.post("/get-signature", (req, res) => {
       cloudName: cloudinary.config().cloud_name,
     });
   } catch (error) {
-    console.error("Error generating signature:", error);
+    console.error("Error in /get-signature:", error);
     res.status(500).json({ error: "Server error generating signature." });
   }
 });
 
+// Port configuration
+const PORT = process.env.PORT || 8080;
+console.log("Port used by the server:", PORT);
 
-const PORT = process.env.PORT || 8080; // Default to 8080 if PORT is not set
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
