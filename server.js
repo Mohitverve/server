@@ -3,9 +3,16 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cloudinary = require("cloudinary").v2;
+const morgan = require("morgan"); // For logging
 
 // Initialize express
 const app = express();
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// Logging middleware
+app.use(morgan('combined'));
 
 // CORS Configuration
 app.use(
@@ -19,9 +26,6 @@ app.use(
 
 // Middleware to handle preflight requests
 app.options("*", cors());
-
-// Parse JSON request bodies
-app.use(express.json());
 
 // Cloudinary configuration
 cloudinary.config({
@@ -74,6 +78,7 @@ app.post("/get-signature", (req, res) => {
 const PORT = process.env.PORT || 8080;
 console.log("Port used by the server:", PORT);
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
